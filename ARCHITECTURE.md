@@ -124,12 +124,19 @@ To ensure maintainability, testability, and adherence to clean architecture prin
 * **Intentional Deferral of Persistence & Networking**: Decoupling the application service from I/O infrastructure allows verifying state transitions and room orchestration independently prior to introducing socket connection lifecycles and database schemas.
 
 
-### 3.3 Persistence Layer (`src/server/db.ts`)
-* Uses SQLite for reliable single-file local persistence.
-* Simple, robust schema:
-  * `rooms`: `id`, `code`, `status`, `created_at`, `updated_at`, `state_json`
-  * `players`: `id`, `room_id`, `role`, `session_token`, `last_seen_at`
-* Full game state stored as serialized JSON, leveraging SQLite's transactional consistency while avoiding premature relational normalization.
+### 3.3 Persistence Layer (`src/server/sqlite-room-store.ts`)
+* **Persistence Boundary**:
+  $$\text{GameService} \longleftarrow \text{RoomStore (interface)} \longleftarrow \text{SqliteRoomStore} \longleftarrow \text{SQLite (node:sqlite)}$$
+* **Why RoomStore Remains an Abstraction**: Decoupling the service from storage enables fast, isolated unit testing using `InMemoryRoomStore` while allowing `SqliteRoomStore` to provide production persistence and restart recovery without touching application logic.
+* **Why Domain State is Persisted as JSON**: Consistent with specification guidance ("storing a whole game as one JSON column is perfectly acceptable; we prefer simple over normalised"). Serializing the immutable `GameState` snapshot avoids relational mapping complexity, schema migrations, and impedance mismatches while providing atomic transactional consistency.
+* **Schema Design**:
+  * `rooms`: `code TEXT PRIMARY KEY`, `status TEXT`, `game_state_json TEXT`, `created_at TEXT`, `updated_at TEXT`
+  * `players`: `room_code TEXT`, `player_id TEXT`, `role TEXT`, `joined_at TEXT`, `PRIMARY KEY (room_code, player_id)`
+* **Data Persisted**: Room code, room status, canonical `GameState` (inventories, backlogs, in-transit shipment pipelines, cost history, pending submissions), player identifiers, assigned roles, timestamps.
+* **Deliberately Not Persisted**: Transient network connections, WebSockets, HTTP request/response contexts, browser tokens, ephemeral timers.
+* **Restart Recovery Mechanism**: On startup or fresh service instantiation, the service loads rooms and players from SQLite on demand via `store.get()` and `store.list()`. Games resume from their exact round and state without triggering artificial advancement, shipment processing, or cost recalculation.
+* **Transactional Atomicity**: All room and player modifications execute inside an atomic SQLite transaction (`BEGIN` ... `COMMIT` / `ROLLBACK`). If a disk write fails, in-memory state is never corrupted.
+
 
 ### 3.4 Client Application (`src/client/`)
 * Single-page application built with Vite and React.
