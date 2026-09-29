@@ -108,6 +108,11 @@ To ensure maintainability, testability, and adherence to clean architecture prin
 * Completely deterministic state machine.
 * Functions accept immutable state and action intents, returning new state and generated events.
 * Directly verified against `fixtures/everyone-orders-four.json`.
+* **Shipment Queues & Delays**: In-transit shipments are modeled as a fixed 2-element tuple `[dueNextRound, dueInTwoRounds]`. In Step 1, index 0 arrives and is added to inventory. In Step 3, newly dispatched upstream shipments are enqueued into index 1.
+* **Order Propagation Delay**: Downstream orders placed during Step 5 of Round $N$ arrive as the upstream neighbor's incoming order in Round $N + 1$.
+* **Factory Supplier Behavior**: Modeled with unconstrained capacity, shipping 100% of the Factory's previous round order (`lastOrderPlaced`) in Step 3, arriving at the Factory after the standard 2-round shipping delay.
+* **Round Transitions**: Steps 1–4 are processed automatically when entering a round; the game then awaits player orders (Step 5). When all 4 roles submit, the round advances, snapshot records are appended to `history`, and Steps 1–4 execute for the next round.
+
 
 ### 3.2 Server Layer (`src/server/`)
 * Manages room lifecycle: creation, room codes (e.g. `BEER-789`), role claiming, and WebSocket subscriptions.

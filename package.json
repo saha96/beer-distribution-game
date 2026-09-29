@@ -2,6 +2,7 @@
   "name": "beer-game",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "description": "Take-home task: a small multiplayer supply-chain game. Keep the script names below working; replace their bodies.",
   "engines": {
     "node": ">=24"
@@ -10,6 +11,6 @@
     "dev": "echo 'TODO: start the server and the client for local development' && exit 1",
     "build": "echo 'TODO: produce a production build' && exit 1",
     "start": "echo 'TODO: run the production build' && exit 1",
-    "test": "echo 'TODO: run the automated tests' && exit 1"
+    "test": "node --test test/**/*.test.ts"
   }
 }
