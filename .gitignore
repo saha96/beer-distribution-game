@@ -1,2 +1,24 @@
-.DS_Store
+# Dependencies
 node_modules/
+
+# Production build artifacts
+dist/
+
+# SQLite databases & temp files
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+
+# Environment & local configuration
+.env
+.env.local
+.env.*.local
+
+# Operating system files
+.DS_Store
+Thumbs.db

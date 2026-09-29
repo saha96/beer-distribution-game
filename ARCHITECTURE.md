@@ -1,0 +1,153 @@
+# Architecture & Engineering Specification
+
+## 1. Project Overview & Context
+
+This project is a full-stack, authoritative multiplayer implementation of the classic **Beer Distribution Game**. The system models a linear four-echelon supply chain consisting of:
+```text
+Customer  →  Retailer  →  Wholesaler  →  Distributor  →  Factory  →  (Unlimited Supplier)
+           ←            ←              ←               ←
+                                Shipments
+```
+Four players each assume one role in the chain, placing orders upstream while shipments flow downstream with propagation delays. The objective of each player (and the supply chain as a whole) is to minimize inventory holding costs and backlog shortage penalties across 20 rounds under variable customer demand.
+
+---
+
+## 2. Requirements & Specification Analysis
+
+### 2.1 Starting State (Round 0 for all roles)
+* **Inventory**: `12` units
+* **Backlog**: `0` units
+* **Shipments in Transit**: `[4, 4]` (Queue: 4 units arriving in Round 1, 4 units arriving in Round 2)
+* **Last Order Placed**: `4` units
+* **Cumulative Cost**: `0.0`
+
+### 2.2 Customer Demand Profile
+* **Rounds 1–4**: `4` units per round (steady state)
+* **Rounds 5–20**: `8` units per round (demand jump inducing the bullwhip effect)
+
+### 2.3 Round Execution Lifecycle (Authoritative Server)
+In each round, the server executes Steps 1–4 simultaneously for all roles, then halts and awaits Step 5:
+1. **Shipments Arrive**: Role dequeues the shipment scheduled for this round and adds it to available inventory (`inventory += arrivedShipment`). Shipment delay is 2 rounds.
+2. **Orders Arrive**:
+   * Retailer receives external customer demand for the current round.
+   * Wholesaler, Distributor, and Factory receive the order submitted by their immediate downstream neighbor in the *previous round* (1-round order delay).
+3. **Ship**:
+   * Demand to satisfy = `backlog + incomingOrder`.
+   * Units shipped = `min(inventory, backlog + incomingOrder)`.
+   * Unfulfilled balance becomes backlog: `newBacklog = (backlog + incomingOrder) - shipped`.
+   * Remaining inventory: `newInventory = inventory - shipped`.
+   * Downstream shipment delivery: Shipped units enter downstream neighbor's transit pipeline (arriving in Round $R + 2$).
+   * Factory's supplier is unconstrained: always fulfills 100% of Factory's previous round order, arriving at Factory after 2 rounds.
+4. **Calculate Costs**:
+   * Holding cost: `0.5 × inventory`
+   * Backlog cost: `1.0 × backlog`
+   * Round cost: `(0.5 × inventory) + (1.0 × backlog)`
+   * Total cost: `cumulativeCost += roundCost`
+5. **Player Order Submission**:
+   * Each player inputs an integer order $O \ge 0$.
+   * Exactly one submission per role per round; submissions are idempotent or locked once submitted.
+   * Round advances strictly when all 4 roles have submitted.
+   * After Round 20, the game transitions to `COMPLETED`.
+
+### 2.4 Information Hiding & Security
+* During active gameplay (Rounds 1–20), each player **must only see**:
+  * Their own metrics: inventory, backlog, current arrived shipment, current incoming order, last order placed, round cost, total cost.
+  * Global metadata: current round number, game status.
+  * Peer status: boolean indicator of whether peers have submitted their order for the active round (`hasSubmitted: boolean`).
+* **Server-Side Enforcement**: The server MUST project/filter the state before serializing and transmitting over WebSocket. Peer internal metrics must never be broadcast over the wire during the game.
+* **Game Completion**: Upon completion of Round 20, final costs and breakdowns for all four roles and total supply-chain cost are revealed.
+
+### 2.5 Persistence & Reconnection
+* SQLite database backing game rooms, participant tokens, and game state snapshots.
+* Client stores a session token (e.g., in `localStorage`).
+* On disconnect or browser refresh, the player presents the session token and automatically resumes their role and current state.
+* Game state persists across server process restarts.
+
+---
+
+## 3. High-Level Architecture & Separation of Concerns
+
+To ensure maintainability, testability, and adherence to clean architecture principles, the codebase is partitioned into distinct layers:
+
+```text
+┌─────────────────────────────────────────────────────────────┐
+│                       React Client                          │
+│   (Vite + React + TypeScript + Tailwind / Minimal CSS)      │
+│   - Lobby Component (Create / Join / Role Select)           │
+│   - Game Dashboard (Role View, Order Input, Peer Status)    │
+│   - Results View (Summary, Cost Breakdown, History)         │
+└──────────────────────────────▲──────────────────────────────┘
+                               │ WebSocket / JSON RPC
+┌──────────────────────────────▼──────────────────────────────┐
+│                   Authoritative Server                      │
+│   (Node.js + HTTP Server + WebSocket Server)                │
+│   - Room & Session Management                               │
+│   - Intent Validation (Order validation, Duplicate guard)   │
+│   - State Projection (Hides peer metrics per player)        │
+│   - Persistence Sync (Transactions via SQLite)              │
+└──────────────────────────────▲──────────────────────────────┘
+                               │ Invokes pure functions
+┌──────────────────────────────▼──────────────────────────────┐
+│                   Pure Domain Engine                        │
+│   (src/core - Zero external dependencies, 100% portable)    │
+│   - State types & initializers                              │
+│   - Round transition logic (Steps 1–4)                      │
+│   - Cost calculation formulas                               │
+│   - Order submission & advancement transition (Step 5)      │
+└──────────────────────────────▲──────────────────────────────┘
+                               │ Verified by
+┌──────────────────────────────┴──────────────────────────────┐
+│                    Automated Test Suite                     │
+│   - Golden Master verification against fixtures             │
+│   - Delay and boundary edge case tests                      │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 3.1 Pure Core Engine (`src/core/`)
+* **No I/O, no network, no database, no React dependencies.**
+* Completely deterministic state machine.
+* Functions accept immutable state and action intents, returning new state and generated events.
+* Directly verified against `fixtures/everyone-orders-four.json`.
+
+### 3.2 Server Layer (`src/server/`)
+* Manages room lifecycle: creation, room codes (e.g. `BEER-789`), role claiming, and WebSocket subscriptions.
+* Bridges network events to core engine transitions.
+* Projects state: converts canonical full `GameState` into `PlayerView` specific to each client role before dispatch.
+
+### 3.3 Persistence Layer (`src/server/db.ts`)
+* Uses SQLite for reliable single-file local persistence.
+* Simple, robust schema:
+  * `rooms`: `id`, `code`, `status`, `created_at`, `updated_at`, `state_json`
+  * `players`: `id`, `room_id`, `role`, `session_token`, `last_seen_at`
+* Full game state stored as serialized JSON, leveraging SQLite's transactional consistency while avoiding premature relational normalization.
+
+### 3.4 Client Application (`src/client/`)
+* Single-page application built with Vite and React.
+* Manages WebSocket connection lifecycle with automatic reconnection and state resynchronization.
+* Supports multi-tab local play (enabling one person to test all four roles across separate browser tabs).
+
+---
+
+## 4. Key Engineering Decisions & Tradeoffs
+
+| Decision | Chosen Approach | Rationale & Tradeoffs |
+|---|---|---|
+| **SQLite Integration** | Built-in Node 24 `node:sqlite` (`DatabaseSync`) | Eliminates native C++ compilation/toolchain issues (`node-gyp`, MSVC, Python) on Windows while providing standard synchronous prepared statement performance. |
+| **State Storage** | Document-style JSON column in SQLite | Recommended by specification ("storing a whole game as one JSON column is perfectly acceptable; we prefer simple over normalised"). Minimizes mapping complexity and migration friction. |
+| **Realtime Transport** | Standard `ws` WebSocket library | Lightweight, standards-compliant, zero unnecessary protocol overhead compared to heavier abstraction layers. |
+| **Frontend Tooling** | Vite + React + TypeScript | Fast HMR, minimal configuration, rapid build times, optimal developer experience. |
+| **Testing Engine** | Node.js native test runner (`node:test`) or Vitest | Allows fast, standalone unit execution matching Node 24 standard capabilities. |
+
+---
+
+## 5. Development & Verification Workflow
+
+The implementation is executed incrementally in isolated stages:
+1. **Core Domain Rules & Types**: Pure TypeScript definitions and round calculation functions.
+2. **Rule Verification Suite**: Automated tests validating round-by-round output against `fixtures/everyone-orders-four.json` and delay edge cases.
+3. **State Management & Persistence**: SQLite repository and room state persistence.
+4. **WebSocket Server & State Projection**: Realtime protocol and role-filtered message broadcasts.
+5. **Lobby & Player Session Handling**: Room creation, role selection, reconnection tokens.
+6. **Game UI & Client Synchronization**: Interactive dashboards for order entry and supply-chain metrics.
+7. **End-to-End Multi-Tab Play**: Verification that 4 browser tabs can complete a full 20-round game.
+8. **Final Polish & Documentation**: Script verification and production packaging.
