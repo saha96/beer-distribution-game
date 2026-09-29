@@ -128,7 +128,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
             <form onSubmit={handleSubmit} className="order-form">
               <div style={{ flex: 1 }}>
                 <label htmlFor="order-input" className="form-label">
-                  Place Order for Next Round (Units)
+                  Place Order (Units)
                 </label>
                 <input
                   id="order-input"

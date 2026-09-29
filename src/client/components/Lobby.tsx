@@ -123,7 +123,7 @@ export const Lobby: React.FC<LobbyProps> = ({ onCreateRoom, onJoinRoom, disabled
               id="room-code-input"
               type="text"
               className="form-input"
-              placeholder="Enter 6-character room code (e.g. BEER-42)"
+              placeholder="Enter room code (e.g. X7K2M9)"
               value={roomCode}
               onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
               disabled={disabled}

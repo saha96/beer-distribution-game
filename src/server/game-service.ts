@@ -25,7 +25,7 @@ import type {
 } from './types.ts';
 
 /**
- * Default generator for 6-character human-friendly room codes (e.g. "BEER-7A9B" or "X7K2M9").
+ * Default generator for 6-character human-friendly room codes (e.g. "X7K2M9").
  */
 function defaultCodeGenerator(): string {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // omit ambiguous 0/O, 1/I
