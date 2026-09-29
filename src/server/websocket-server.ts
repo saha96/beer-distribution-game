@@ -281,12 +281,16 @@ export class RealtimeServer {
     this.connections.clear();
 
     if (this.wss) {
+      for (const client of this.wss.clients) {
+        client.terminate();
+      }
       await new Promise<void>((resolve) => {
         this.wss!.close(() => resolve());
       });
     }
 
     if (this.isOwnedServer && this.httpServer) {
+      this.httpServer.closeAllConnections?.();
       await new Promise<void>((resolve) => {
         this.httpServer!.close(() => resolve());
       });
