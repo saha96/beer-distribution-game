@@ -12,5 +12,9 @@
     "build": "echo 'TODO: produce a production build' && exit 1",
     "start": "echo 'TODO: run the production build' && exit 1",
     "test": "node --test test/**/*.test.ts"
+  },
+  "dependencies": {
+    "@types/ws": "^8.18.2",
+    "ws": "^8.22.0"
   }
 }

@@ -138,10 +138,32 @@ To ensure maintainability, testability, and adherence to clean architecture prin
 * **Transactional Atomicity**: All room and player modifications execute inside an atomic SQLite transaction (`BEGIN` ... `COMMIT` / `ROLLBACK`). If a disk write fails, in-memory state is never corrupted.
 
 
-### 3.4 Client Application (`src/client/`)
+### 3.4 Realtime WebSocket Transport Layer (`src/server/websocket-server.ts`)
+* **Architectural Boundary**:
+  $$\text{Browser Client} \longleftrightarrow \text{RealtimeServer} \longleftrightarrow \text{GameService} \longleftrightarrow \text{RoomStore} \longleftrightarrow \text{SQLite}$$
+* **No Game Rules in Transport**: The WebSocket layer parses JSON envelopes, associates connections with verified identities, translates errors, and dispatches intents to `GameService`. It never evaluates shipping formulas, cost arithmetic, or turn advancement.
+* **Socket-to-Player Association & Identity Protection**:
+  * Upon `create_room`, `join_room`, or `resume`, the socket is bound to a `SocketSession` (`{ roomCode, playerId, role }`).
+  * Submissions like `place_order` require an established session. If payload identifiers disagree with the socket's established session, the request is rejected with `IDENTITY_MISMATCH` or `ROOM_MISMATCH`. Clients cannot forge orders for other roles.
+* **Individualized Projections & Broadcasting**:
+  * The server NEVER broadcasts the canonical `GameState`.
+  * When room state changes, `broadcastRoom(roomCode)` iterates through connected sockets for that room and queries `gameService.getPlayerView(roomCode, playerId)` for each player independently.
+  * Every client receives strictly its own role's view (`room_state`); peer numbers never travel over the network during active gameplay.
+* **Transient Connection Registry**:
+  * Sockets are stored in an in-memory mapping (`roomCode -> playerId -> WebSocket`).
+  * When a connection drops, the socket is removed from the registry without altering game state, round index, or database records.
+* **Reconnection & Server Restart Recovery**:
+  * Disconnected players reconnect by sending `{ type: "resume", roomCode, playerId }`.
+  * The server resolves the player through `GameService` (which queries SQLite), restores the socket session, and transmits the current state snapshot immediately.
+* **Message Protocol Summary**:
+  * **Client Messages**: `create_room`, `join_room`, `place_order`, `resume`
+  * **Server Messages**: `room_state` (individualized view), `error` (standardized machine-readable code + message)
+
+### 3.5 Client Application (`src/client/`)
 * Single-page application built with Vite and React.
 * Manages WebSocket connection lifecycle with automatic reconnection and state resynchronization.
 * Supports multi-tab local play (enabling one person to test all four roles across separate browser tabs).
+
 
 ---
 
