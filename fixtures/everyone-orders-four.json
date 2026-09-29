@@ -1,0 +1,885 @@
+{
+  "description": "Expected state after steps 1-4 of each round when every player orders 4 every round. Costs: 0.5 per inventory unit, 1.0 per backlog unit. Shipping delay 2 rounds; orders reach upstream the next round.",
+  "initial": {
+    "inventory": 12,
+    "backlog": 0,
+    "shipmentsInTransit": [
+      4,
+      4
+    ],
+    "lastOrderPlaced": 4
+  },
+  "customerDemand": {
+    "rounds1to4": 4,
+    "rounds5to20": 8
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "retailer": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 6,
+        "orderPlaced": 4
+      },
+      "wholesaler": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 6,
+        "orderPlaced": 4
+      },
+      "distributor": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 6,
+        "orderPlaced": 4
+      },
+      "factory": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 6,
+        "orderPlaced": 4
+      }
+    },
+    {
+      "round": 2,
+      "retailer": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 12,
+        "orderPlaced": 4
+      },
+      "wholesaler": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 12,
+        "orderPlaced": 4
+      },
+      "distributor": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 12,
+        "orderPlaced": 4
+      },
+      "factory": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 12,
+        "orderPlaced": 4
+      }
+    },
+    {
+      "round": 3,
+      "retailer": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 18,
+        "orderPlaced": 4
+      },
+      "wholesaler": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 18,
+        "orderPlaced": 4
+      },
+      "distributor": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 18,
+        "orderPlaced": 4
+      },
+      "factory": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 18,
+        "orderPlaced": 4
+      }
+    },
+    {
+      "round": 4,
+      "retailer": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 24,
+        "orderPlaced": 4
+      },
+      "wholesaler": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 24,
+        "orderPlaced": 4
+      },
+      "distributor": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 24,
+        "orderPlaced": 4
+      },
+      "factory": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 24,
+        "orderPlaced": 4
+      }
+    },
+    {
+      "round": 5,
+      "retailer": {
+        "shipmentArrived": 4,
+        "incomingOrder": 8,
+        "shipped": 8,
+        "inventory": 8,
+        "backlog": 0,
+        "roundCost": 4,
+        "totalCost": 28,
+        "orderPlaced": 4
+      },
+      "wholesaler": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 30,
+        "orderPlaced": 4
+      },
+      "distributor": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 30,
+        "orderPlaced": 4
+      },
+      "factory": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 30,
+        "orderPlaced": 4
+      }
+    },
+    {
+      "round": 6,
+      "retailer": {
+        "shipmentArrived": 4,
+        "incomingOrder": 8,
+        "shipped": 8,
+        "inventory": 4,
+        "backlog": 0,
+        "roundCost": 2,
+        "totalCost": 30,
+        "orderPlaced": 4
+      },
+      "wholesaler": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 36,
+        "orderPlaced": 4
+      },
+      "distributor": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 36,
+        "orderPlaced": 4
+      },
+      "factory": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 36,
+        "orderPlaced": 4
+      }
+    },
+    {
+      "round": 7,
+      "retailer": {
+        "shipmentArrived": 4,
+        "incomingOrder": 8,
+        "shipped": 8,
+        "inventory": 0,
+        "backlog": 0,
+        "roundCost": 0,
+        "totalCost": 30,
+        "orderPlaced": 4
+      },
+      "wholesaler": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 42,
+        "orderPlaced": 4
+      },
+      "distributor": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 42,
+        "orderPlaced": 4
+      },
+      "factory": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 42,
+        "orderPlaced": 4
+      }
+    },
+    {
+      "round": 8,
+      "retailer": {
+        "shipmentArrived": 4,
+        "incomingOrder": 8,
+        "shipped": 4,
+        "inventory": 0,
+        "backlog": 4,
+        "roundCost": 4,
+        "totalCost": 34,
+        "orderPlaced": 4
+      },
+      "wholesaler": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 48,
+        "orderPlaced": 4
+      },
+      "distributor": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 48,
+        "orderPlaced": 4
+      },
+      "factory": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 48,
+        "orderPlaced": 4
+      }
+    },
+    {
+      "round": 9,
+      "retailer": {
+        "shipmentArrived": 4,
+        "incomingOrder": 8,
+        "shipped": 4,
+        "inventory": 0,
+        "backlog": 8,
+        "roundCost": 8,
+        "totalCost": 42,
+        "orderPlaced": 4
+      },
+      "wholesaler": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 54,
+        "orderPlaced": 4
+      },
+      "distributor": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 54,
+        "orderPlaced": 4
+      },
+      "factory": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 54,
+        "orderPlaced": 4
+      }
+    },
+    {
+      "round": 10,
+      "retailer": {
+        "shipmentArrived": 4,
+        "incomingOrder": 8,
+        "shipped": 4,
+        "inventory": 0,
+        "backlog": 12,
+        "roundCost": 12,
+        "totalCost": 54,
+        "orderPlaced": 4
+      },
+      "wholesaler": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 60,
+        "orderPlaced": 4
+      },
+      "distributor": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 60,
+        "orderPlaced": 4
+      },
+      "factory": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 60,
+        "orderPlaced": 4
+      }
+    },
+    {
+      "round": 11,
+      "retailer": {
+        "shipmentArrived": 4,
+        "incomingOrder": 8,
+        "shipped": 4,
+        "inventory": 0,
+        "backlog": 16,
+        "roundCost": 16,
+        "totalCost": 70,
+        "orderPlaced": 4
+      },
+      "wholesaler": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 66,
+        "orderPlaced": 4
+      },
+      "distributor": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 66,
+        "orderPlaced": 4
+      },
+      "factory": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 66,
+        "orderPlaced": 4
+      }
+    },
+    {
+      "round": 12,
+      "retailer": {
+        "shipmentArrived": 4,
+        "incomingOrder": 8,
+        "shipped": 4,
+        "inventory": 0,
+        "backlog": 20,
+        "roundCost": 20,
+        "totalCost": 90,
+        "orderPlaced": 4
+      },
+      "wholesaler": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 72,
+        "orderPlaced": 4
+      },
+      "distributor": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 72,
+        "orderPlaced": 4
+      },
+      "factory": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 72,
+        "orderPlaced": 4
+      }
+    },
+    {
+      "round": 13,
+      "retailer": {
+        "shipmentArrived": 4,
+        "incomingOrder": 8,
+        "shipped": 4,
+        "inventory": 0,
+        "backlog": 24,
+        "roundCost": 24,
+        "totalCost": 114,
+        "orderPlaced": 4
+      },
+      "wholesaler": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 78,
+        "orderPlaced": 4
+      },
+      "distributor": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 78,
+        "orderPlaced": 4
+      },
+      "factory": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 78,
+        "orderPlaced": 4
+      }
+    },
+    {
+      "round": 14,
+      "retailer": {
+        "shipmentArrived": 4,
+        "incomingOrder": 8,
+        "shipped": 4,
+        "inventory": 0,
+        "backlog": 28,
+        "roundCost": 28,
+        "totalCost": 142,
+        "orderPlaced": 4
+      },
+      "wholesaler": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 84,
+        "orderPlaced": 4
+      },
+      "distributor": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 84,
+        "orderPlaced": 4
+      },
+      "factory": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 84,
+        "orderPlaced": 4
+      }
+    },
+    {
+      "round": 15,
+      "retailer": {
+        "shipmentArrived": 4,
+        "incomingOrder": 8,
+        "shipped": 4,
+        "inventory": 0,
+        "backlog": 32,
+        "roundCost": 32,
+        "totalCost": 174,
+        "orderPlaced": 4
+      },
+      "wholesaler": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 90,
+        "orderPlaced": 4
+      },
+      "distributor": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 90,
+        "orderPlaced": 4
+      },
+      "factory": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 90,
+        "orderPlaced": 4
+      }
+    },
+    {
+      "round": 16,
+      "retailer": {
+        "shipmentArrived": 4,
+        "incomingOrder": 8,
+        "shipped": 4,
+        "inventory": 0,
+        "backlog": 36,
+        "roundCost": 36,
+        "totalCost": 210,
+        "orderPlaced": 4
+      },
+      "wholesaler": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 96,
+        "orderPlaced": 4
+      },
+      "distributor": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 96,
+        "orderPlaced": 4
+      },
+      "factory": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 96,
+        "orderPlaced": 4
+      }
+    },
+    {
+      "round": 17,
+      "retailer": {
+        "shipmentArrived": 4,
+        "incomingOrder": 8,
+        "shipped": 4,
+        "inventory": 0,
+        "backlog": 40,
+        "roundCost": 40,
+        "totalCost": 250,
+        "orderPlaced": 4
+      },
+      "wholesaler": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 102,
+        "orderPlaced": 4
+      },
+      "distributor": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 102,
+        "orderPlaced": 4
+      },
+      "factory": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 102,
+        "orderPlaced": 4
+      }
+    },
+    {
+      "round": 18,
+      "retailer": {
+        "shipmentArrived": 4,
+        "incomingOrder": 8,
+        "shipped": 4,
+        "inventory": 0,
+        "backlog": 44,
+        "roundCost": 44,
+        "totalCost": 294,
+        "orderPlaced": 4
+      },
+      "wholesaler": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 108,
+        "orderPlaced": 4
+      },
+      "distributor": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 108,
+        "orderPlaced": 4
+      },
+      "factory": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 108,
+        "orderPlaced": 4
+      }
+    },
+    {
+      "round": 19,
+      "retailer": {
+        "shipmentArrived": 4,
+        "incomingOrder": 8,
+        "shipped": 4,
+        "inventory": 0,
+        "backlog": 48,
+        "roundCost": 48,
+        "totalCost": 342,
+        "orderPlaced": 4
+      },
+      "wholesaler": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 114,
+        "orderPlaced": 4
+      },
+      "distributor": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 114,
+        "orderPlaced": 4
+      },
+      "factory": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 114,
+        "orderPlaced": 4
+      }
+    },
+    {
+      "round": 20,
+      "retailer": {
+        "shipmentArrived": 4,
+        "incomingOrder": 8,
+        "shipped": 4,
+        "inventory": 0,
+        "backlog": 52,
+        "roundCost": 52,
+        "totalCost": 394,
+        "orderPlaced": 4
+      },
+      "wholesaler": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 120,
+        "orderPlaced": 4
+      },
+      "distributor": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 120,
+        "orderPlaced": 4
+      },
+      "factory": {
+        "shipmentArrived": 4,
+        "incomingOrder": 4,
+        "shipped": 4,
+        "inventory": 12,
+        "backlog": 0,
+        "roundCost": 6,
+        "totalCost": 120,
+        "orderPlaced": 4
+      }
+    }
+  ],
+  "finalCosts": {
+    "retailer": 394,
+    "wholesaler": 120,
+    "distributor": 120,
+    "factory": 120
+  },
+  "totalCost": 754
+}
