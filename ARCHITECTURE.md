@@ -115,9 +115,14 @@ To ensure maintainability, testability, and adherence to clean architecture prin
 
 
 ### 3.2 Server Layer (`src/server/`)
-* Manages room lifecycle: creation, room codes (e.g. `BEER-789`), role claiming, and WebSocket subscriptions.
-* Bridges network events to core engine transitions.
-* Projects state: converts canonical full `GameState` into `PlayerView` specific to each client role before dispatch.
+* **Architectural Boundary**:
+  $$\text{Core Rules} \longleftarrow \text{Game Service} \longleftarrow \text{WebSocket / HTTP Protocol} \longleftarrow \text{Client}$$
+* **Role of GameService**: Coordinates room lifecycles, player registrations, role allocations, and client intents. It delegates all game mechanics to the core engine, ensuring no business logic duplication.
+* **Framework Independence of Core Engine**: Keeping `src/core/` decoupled from HTTP, WebSockets, and SQLite ensures game rules are 100% portable, deterministic, and verifiable in isolation without network mocks or database fixtures.
+* **Authoritative State Ownership**: The authoritative state resides in memory in `GameRoom.gameState`. State updates are strictly immutable: `room.gameState = corePlaceOrder(room.gameState, role, order)`.
+* **Server-Side State Projection**: Each player view is projected before leaving the server. Internal peer metrics (inventories, backlogs, order amounts, cost breakdowns) are omitted at the source, preventing data leakage over the network.
+* **Intentional Deferral of Persistence & Networking**: Decoupling the application service from I/O infrastructure allows verifying state transitions and room orchestration independently prior to introducing socket connection lifecycles and database schemas.
+
 
 ### 3.3 Persistence Layer (`src/server/db.ts`)
 * Uses SQLite for reliable single-file local persistence.
