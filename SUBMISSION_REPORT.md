@@ -18,7 +18,7 @@ The primary objective for the team is to minimize cumulative supply chain costs 
 
 ## 2. Original Requirements
 
-The technical challenge required delivering a production-ready, test-driven application satisfying:
+The technical challenge required delivering a test-driven application designed to run on Node.js 24 without native SQLite build dependencies, satisfying:
 1. **Pure Game Engine**: A deterministic, framework-independent rules engine matching the provided specification and `fixtures/everyone-orders-four.json` with 100% mathematical fidelity.
 2. **Authoritative Backend**: A server layer that manages room lifecycles, player registrations, role allocations, intent validation, and strict player view projections.
 3. **Robust Persistence**: Durability across server restarts using SQLite, ensuring zero state corruption or premature round advancement upon recovery.
@@ -36,7 +36,7 @@ Development was executed incrementally across six focused, verifiable phases:
 3. **Phase 2 — Authoritative Game Service (`src/server/game-service.ts`)**: Built room coordination, role claiming, intent gating, and information-hiding view projections.
 4. **Phase 3 — SQLite Persistence (`src/server/sqlite-room-store.ts`)**: Integrated Node 24's native `node:sqlite DatabaseSync` with atomic transaction boundaries and recovery testing.
 5. **Phase 4 — Realtime WebSocket Layer (`src/server/websocket-server.ts`)**: Implemented bidirectional JSON messaging, socket identity locking, connection management, and session resumption.
-6. **Phase 5 — React Frontend Client (`src/client/`)**: Developed the Vite + React 19 interface with tab-scoped session isolation (`sessionStorage`), enabling seamless single-browser multi-tab evaluation.
+6. **Phase 5 — React Frontend Client (`src/client/`)**: Developed the Vite + React 19 interface with tab-scoped session isolation (`sessionStorage`), enabling single-browser multi-tab evaluation.
 7. **Phase 6 — Consistency Audit & Verification**: Aligned UI copy with backend protocol behavior and verified end-to-end execution against golden master benchmarks.
 
 ---
@@ -88,7 +88,7 @@ The system enforces strict unidirectional dependencies following Clean Architect
 ### Persistence (`src/server/sqlite-room-store.ts`)
 - Uses Node 24 native `node:sqlite DatabaseSync`.
 - Schema contains `rooms` and `players` tables with atomic `BEGIN IMMEDIATE ... COMMIT` transactions.
-- Canonical state serialized as JSON, guaranteeing instant, lossless recovery across process restarts.
+- Canonical state serialized as JSON, enabling point-in-time recovery across process restarts.
 
 ### WebSocket Server (`src/server/websocket-server.ts`)
 - Bidirectional event transport using `ws`.
@@ -285,7 +285,7 @@ Verified via live 4-client simulation with varying order inputs:
 
 | Decision | Implementation | Justification & Tradeoffs |
 | :--- | :--- | :--- |
-| **Node 24 `node:sqlite`** | Standard library `DatabaseSync` | Zero external native compilation (`node-gyp`, Python, C++ tools). Guarantees frictionless installation across Windows, macOS, and Linux while maintaining synchronous ACID transactional safety. |
+| **Node 24 `node:sqlite`** | Standard library `DatabaseSync` | Designed to run on Node.js 24 without native SQLite build dependencies (`node-gyp`, Python, C++ tools) while maintaining synchronous ACID transactional safety. |
 | **Document State Storage** | JSON text column in SQLite | Recommended in the assignment specification. Avoids complex relational ORM mapping for nested pipeline tuples while ensuring atomic point-in-time state recovery. |
 | **Standard WebSocket (`ws`)** | Raw WebSocket JSON protocol | Avoids socket.io overhead, proprietary handshakes, and client bundling bloat while giving full control over serialization, backpressure, and payload auditing. |
 | **Tab-Scoped Storage** | Browser `sessionStorage` | Enables single-machine multi-tab evaluation. Origin-scoped `localStorage` would cause player identity collisions across tabs; `sessionStorage` isolates tabs while persisting through page refreshes (F5). |
@@ -325,4 +325,4 @@ All architectural boundaries, domain rules, state invariants, information-hiding
 | **Development Startup (`npm run dev`)** | **PASSED** | Started backend on `:3000` and Vite dev server on `:5173`. |
 | **Production Server (`npm start`)** | **PASSED** | Booted on `:3000`, verified `/health`, `/`, assets, and `/ws`. |
 | **Multiplayer Simulations** | **PASSED** | 100% exact match on Golden Master ($754) and Mixed Scenario ($625.5). |
-| **Working Tree Status** | **CLEAN** | Branch `feature/beer-distribution-game`, no remote configured. |
+| **Repository Status** | **CLEAN** | Current Branch: `main`<br>Remote: GitHub repository configured (`git@github.com:saha96/beer-distribution-game.git`)<br>Working Tree: clean |
